@@ -62,7 +62,12 @@ const myFunctions = {
   getItemsMinicart: () => {
     const $miniCartBody = document.querySelector('.minicart__body');
     const itensCart = cart.items.map(
-      ({ name, altImage, image, quantity, bestPriceFormated }) => {
+      ({ name, altImage, image, quantity, bestPrice }) => {
+        const sum = (quantity * bestPrice) / 100;
+        const priceFormated = sum.toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+        });
         return `<li class="minicart__product" id="1">
               <div class="minicart__image">
                 <img src=${image} alt=${altImage} />
@@ -71,7 +76,7 @@ const myFunctions = {
                 <p class="minicart__productName">${name}</p>
                 <div class="minicart__quantity-price">
                   <span class="minicart__quantity">Qtd: <span>${quantity}</span></span>
-                  <span class="minicart__price">${bestPriceFormated}</span>
+                  <span class="minicart__price">${priceFormated}</span>
                 </div>
               </div>
             </li>`;
@@ -83,13 +88,12 @@ const myFunctions = {
   sumTotalsProducts: () => {
     const $totalPrice = document.querySelector('.minicart__totalProducts');
     const totalProducts = cart.items.map(({ bestPrice, quantity }) => {
-      return bestPrice * quantity;
+      return (bestPrice * quantity) / 100;
     });
     const sum = totalProducts.reduce((sum, totalProducts) => {
       return sum + totalProducts;
     }, 0);
-    const total = sum / 100;
-    const totalFormated = total.toLocaleString('pt-BR', {
+    const totalFormated = sum.toLocaleString('pt-BR', {
       style: 'currency',
       currency: 'BRL',
     });
